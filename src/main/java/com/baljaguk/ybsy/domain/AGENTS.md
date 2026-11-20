@@ -6,9 +6,9 @@
 
 | 묶음 | 도메인 패키지 | 담당 |
 |---|---|---|
-| A | `auth`, `user`(프로필·회원 탈퇴) | (GitHub ID 기입) |
-| B | `semester`, `category`, `studylog`, `ai` | (GitHub ID 기입) |
-| C | `plan`(온보딩 저장 포함), `certificate` | (GitHub ID 기입) |
+| A | `auth`, `user`(프로필·회원 탈퇴) | @win-water |
+| B | `semester`, `category`, `studylog`, `ai` | @bjh966700-tech |
+| C | `plan`(온보딩 저장 포함), `certificate` | @jungwoo2633 |
 
 - 다른 묶음의 도메인 코드를 고쳐야 하면 담당자에게 리뷰를 요청한다.
 - 도메인 사이 호출이 필요하면 상대 Service에 메서드를 요청·추가하고, 계약(입력·출력·예외)을 PR에 적는다. 예: 가입 시 첫 학기 생성(`user` → `SemesterService`).
