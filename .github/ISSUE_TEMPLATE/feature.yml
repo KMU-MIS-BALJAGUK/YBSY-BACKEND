@@ -1,0 +1,39 @@
+name: 기능
+description: 새 API·기능 구현 또는 원본(Supabase) 기능 이전
+title: "[도메인] "
+labels: ["feature"]
+body:
+  - type: input
+    id: spec
+    attributes:
+      label: 명세서 기능 ID
+      placeholder: "FR-01-1, API·DB 함수 시트 5행"
+  - type: textarea
+    id: goal
+    attributes:
+      label: 할 일
+      description: 무엇을 만들고, 완료되면 무엇이 되는지
+    validations:
+      required: true
+  - type: textarea
+    id: origin
+    attributes:
+      label: 원본 동작
+      description: 옮길 Supabase 테이블·SQL 함수·트리거·RLS 와 지켜야 할 규칙
+  - type: textarea
+    id: api
+    attributes:
+      label: API 초안
+      placeholder: |
+        POST /auth/google
+        요청: { code, codeVerifier, redirectUri }
+        응답: 200 { accessToken, expiresIn }
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 조건
+      value: |
+        - [ ] 구현
+        - [ ] 테스트
+        - [ ] docs/MIGRATION.md 갱신
+        - [ ] 프론트 공유

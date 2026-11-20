@@ -1,0 +1,28 @@
+name: 버그
+description: 잘못 동작하는 API·오류 보고
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 무슨 일이 있었나
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법
+      placeholder: |
+        1. POST /plans 에 ... 를 보냄
+        2. 500 응답
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대한 결과
+  - type: textarea
+    id: logs
+    attributes:
+      label: 응답·로그
+      description: 토큰·비밀번호·개인정보는 지우고 붙여 주세요
+      render: text

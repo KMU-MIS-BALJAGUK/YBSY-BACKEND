@@ -1,0 +1,12 @@
+# 테스트용: 외부 MySQL 없이 H2(MySQL 호환 모드)로 실행한다.
+# MySQL 전용 문법 검증이 필요한 테스트는 별도로 실제 MySQL 에서 돌린다 (src/test/.../AGENTS.md 참고).
+spring:
+  datasource:
+    url: jdbc:h2:mem:ybsy;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+app:
+  cors:
+    allowed-origins: http://localhost:5173

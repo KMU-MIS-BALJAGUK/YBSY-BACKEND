@@ -1,0 +1,12 @@
+# 운영용. 모든 접속 정보는 배포 환경의 환경변수로만 받는다(기본값 없음).
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
