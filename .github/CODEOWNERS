@@ -1,5 +1,6 @@
-# 도메인 담당자가 PR 리뷰어로 자동 지정된다 (src/main/java/com/baljaguk/ybsy/domain/AGENTS.md 와 맞춘다).
-# 아래에 없는 경로(global, 설정, 문서 등)는 백엔드 전원이 리뷰한다.
+# PR 리뷰 요청을 자동으로 보내는 용도다. 담당자 승인은 필수가 아니며 백엔드 아무나 1명 승인하면 머지된다.
+# 도메인 담당은 src/main/java/com/baljaguk/ybsy/domain/AGENTS.md 와 맞춘다.
+# 아래에 없는 경로(global, 설정, 문서 등)는 백엔드 전원에게 리뷰를 요청한다.
 *                                                     @win-water @bjh966700-tech @jungwoo2633
 
 # A. 인증 · 프로필
