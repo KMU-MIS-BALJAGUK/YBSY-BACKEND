@@ -53,16 +53,23 @@
 | 기능 | 원본 | API | 서버 규칙 | 상태 |
 |---|---|---|---|---|
 | 온보딩 계획·자격증 저장 | `rpc('save_onboarding_plans')` | `POST /onboarding/plans` | 한 트랜잭션 | ⬜ |
-| 계획 목록 / 하나 | `from('plans').select` | `GET /plans`, `GET /plans/{id}` | 지금 학기만 | ⬜ |
-| 계획 추가 | count 확인 후 insert | `POST /plans` | 학기당 30개, semester_id 자동 | ⬜ |
-| 여러 계획 추가 (시간표) | `insert([...])` | `POST /plans/bulk` | 30개 제한 포함 | ⬜ |
-| 계획 수정 / 그만두기 | `from('plans').update` | `PATCH /plans/{id}` | | ⬜ |
+| 계획 목록 / 하나 | `from('plans').select` | `GET /plans`, `GET /plans/{id}` | 지금 학기만 | ✅ |
+| 계획 추가 | count 확인 후 insert | `POST /plans` | 학기당 30개, semester_id 자동 | ✅ |
+| 여러 계획 추가 (시간표) | `insert([...])` | `POST /plans/bulk` | 30개 제한 포함 | ✅ |
+| 계획 수정 / 그만두기 | `from('plans').update` | `PATCH /plans/{id}` | | ✅ |
 | 계획 삭제 | `from('plans').delete` | `DELETE /plans/{id}` | 기록도 CASCADE | ⬜ |
 | 개강일 변경 시 주차 재계산 | 화면에서 계획마다 update | (`PATCH /me` 처리 중 서버가 일괄) | A·B와 계약 필요 | ⬜ |
 | 자격증 목록 | `from('certificates').select` | `GET /certificates?q=` | 공용 + 내 것 | ⬜ |
 | 내가 고른 회차 | `from('user_certificates')` | `GET/POST /me/certificates`, `PATCH/DELETE /me/certificates/{certificateId}` | 지금 학기만, 학습 1~40h, 준비 1~16주 | ⬜ |
 | 직접 추가 | insert 두 번 | `POST /certificates/custom` | 20개 제한, **한 트랜잭션** | ⬜ |
 | 직접 추가 삭제 | `from('certificates').delete` | `DELETE /certificates/{id}` | 내 것만 | ⬜ |
+
+### 계획 API 연동 (#2)
+
+- 인증 모듈은 검증한 내부 사용자 PK를 `Principal.getName()`으로 제공한다. 현재 학기는 `profiles.current_semester_id`로 정한다. V1에 계획 FK에 필요한 사용자·프로필·학기·유형 키를 먼저 정의했으며, 가입·학기 생성·전환은 A·B에서 연결한다.
+- 단건과 일괄 등록은 사용자 프로필을 먼저 잠근 뒤 같은 트랜잭션에서 현재 학기의 개수를 확인한다. 일괄 요청은 `{"plans":[...]}`이고, 성공하면 등록한 순서로 계획 배열을 반환한다. 30개 초과는 HTTP 409이다.
+- `PATCH /plans/{id}`는 전달된 필드만 반영한다. `{"stopped":true}`는 서버 UTC 시각을 기록하고 `{"stopped":false}`는 비운다. 원본의 날짜형 `stopped_at`은 이슈의 시각 요구에 따라 응답에서 `stoppedAt`(ISO 8601)으로 제공한다.
+- 공부 요일은 요청·응답에서 월요일 0부터 일요일 6까지의 배열이다. DB에는 7비트 정수로 저장하며, 지정하지 않은 요일 설정은 NULL이다. 유형 지정 시 본인 소유를 확인하고, 유형 삭제 시 FK가 계획의 `category_id`를 비운다.
 
 ## 3. 인증 설계 (A)
 
@@ -124,7 +131,7 @@ Spring Security `oauth2Login()`을 쓰지 않고 OAuth 흐름을 직접 구현�
 | `switch_semester`, `start_next_semester`, `reset_current_semester` | 학기 관리 | `SemesterService` | B | ⬜ |
 | `enforce_category_limit` | 내 유형 10개 | `CategoryService` | B | ⬜ |
 | `consume_ai_quota` | AI 하루 20회 | `AiQuotaService` | B | ⬜ |
-| `enforce_plan_limit` | 계획 30개 (P0030) | `PlanService` | C | ⬜ |
+| `enforce_plan_limit` | 계획 30개 (`P0030` → `PLAN_LIMIT_EXCEEDED`) | `PlanService` | C | ✅ |
 | `save_onboarding_plans` | 온보딩 일괄 저장 | `OnboardingService` | C | ⬜ |
 | `enforce_own_certificate_limit` | 직접 추가 자격증 20개 | `CertificateService` | C | ⬜ |
 | `set_updated_at` | 수정 시각 | `BaseTimeEntity` (JPA Auditing) | 공통 | ✅ |
