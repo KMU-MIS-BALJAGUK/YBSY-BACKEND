@@ -8,6 +8,7 @@
 | 항목 | 원본 | 이전 후 | 비고 |
 |---|---|---|---|
 | DB | Supabase PostgreSQL | MySQL 8 | 스키마는 Flyway로 다시 작성 |
+| 마이그레이션 버전 | `supabase/migrations/2026…_*.sql` | Flyway `V{yyyyMMddHHmm}__*.sql` (날짜·시간) | 동시 작업 시 번호 충돌 방지. `db/migration/README.md` |
 | 인증 | Supabase Auth (Google, PKCE) | Google OAuth2 직접 구현 + 자체 JWT | 3장 |
 | 권한 | RLS (본인 행만) | Service에서 현재 사용자 id 조건 | 남의 데이터 → 404 |
 | SQL 함수·트리거 | DB 안 | Service + `@Transactional` | 4장 |

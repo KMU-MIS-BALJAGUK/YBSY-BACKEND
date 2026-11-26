@@ -37,7 +37,9 @@ com.baljaguk.ybsy
 ## 영속성 (MySQL · JPA · Flyway)
 
 - 스키마는 **Flyway 마이그레이션으로만** 바꾼다(`src/main/resources/db/migration`). `ddl-auto`는 `validate`이며 바꾸지 않는다.
+- 마이그레이션 파일 이름은 날짜·시간 버전 `V{yyyyMMddHHmm}__{설명}.sql`을 쓴다. 순번(`V1`, `V2`)은 쓰지 않는다. 자세한 규칙은 `src/main/resources/db/migration/README.md`.
 - 머지된 마이그레이션 파일은 수정하지 않는다. 새 버전을 추가한다.
+- 다른 담당 도메인의 테이블을 마이그레이션으로 만들지 않는다. 담당은 `docs/MIGRATION.md` 4장.
 - PK는 `BIGINT AUTO_INCREMENT`(`@GeneratedValue(strategy = IDENTITY)`). 문자셋 `utf8mb4`, 엔진 InnoDB.
 - 시각은 UTC `Instant` ↔ `DATETIME(6)`, 날짜만이면 `LocalDate` ↔ `DATE`. 시간대 변환은 프론트에서 한다.
 - 사용자 데이터 테이블은 `user_id`에 FK + `ON DELETE CASCADE`를 둔다(회원 탈퇴 시 함께 삭제, 명세 FR-09-2).
