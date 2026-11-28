@@ -4,6 +4,10 @@ spring:
     url: ${DB_URL:jdbc:mysql://localhost:3306/ybsy?serverTimezone=UTC&characterEncoding=UTF-8}
     username: ${DB_USERNAME:ybsy}
     password: ${DB_PASSWORD}
+  flyway:
+    # 날짜·시간 버전은 머지 순서가 만든 시각과 다를 수 있다.
+    # 내 로컬 DB보다 이른 버전의 파일이 나중에 들어와도 실행한다 (db/migration/README.md).
+    out-of-order: true
   jpa:
     show-sql: false
     properties:
